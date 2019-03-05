@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzdc.iotloc.dao.AdminManageMapper">
+<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+
+
+
+<select id="showAdminList" resultType="AdminInfo" parameterType="AdminInfo" useCache="false" >
+select * from admininfo
+<if test="user_foxconn_id!=null">
+and user_foxconn_id like CONCAT('%',#{user_foxconn_id},'%')
+</if>
+<if test="user_name!=null">
+and user_name like CONCAT('%',#{user_name},'%')
+</if>
+order by create_date desc
+</select>
+
+<select id="showAdminListByUser" resultType="AdminInfo" parameterType="AdminInfo" useCache="false">
+select * from admininfo where user_foxconn_id = #{user_foxconn_id}
+</select>
+
+<insert id="addAdmin" parameterType="AdminInfo">
+insert into admininfo(id,user_foxconn_id,user_password,user_name,user_mail,user_role,create_date)
+       values
+       (#{id},#{user_foxconn_id},#{user_password},#{user_name},#{user_mail},#{user_role},#{create_date})
+</insert>
+
+
+<delete id="deleteSelectedUserInfo" parameterType="AdminInfo">
+delete from admininfo where user_foxconn_id =#{user_foxconn_id};
+</delete>
+
+<update id="updateSeletedUserPassword" parameterType="AdminInfo">
+	 update admininfo  set user_password = #{user_password}
+	 where user_foxconn_id = #{user_foxconn_id};
+</update>
+
+<update id="editSeletedUserInfo" parameterType="AdminInfo">
+	 update admininfo  set user_name =#{user_name},user_mail =#{user_mail}
+	 where user_foxconn_id = #{user_foxconn_id};
+</update>
+<select id="findSeletedUserByFoxId" resultType="AdminInfo" parameterType="AdminInfo" useCache="false">
+select * from admininfo where user_foxconn_id = #{user_foxconn_id}
+</select>
+</mapper>

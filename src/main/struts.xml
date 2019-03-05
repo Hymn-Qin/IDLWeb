@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- 國際化 -->
+	<!-- spring 監聽器 -->
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.custom.i18n.resources" value="mess" />
+	<!-- 上傳文件大小的限制 -->
+	<constant name="struts.multipart.maxSize" value="52428800" />
+	<package name="userlogin" extends="struts-default">
+		<!-- 验证码 start -->
+		<action name="rand" class="com.zzdc.fileexchange.action.RandomAction"
+			method="execute">
+			<result type="stream">
+				<param name="contentType">ima/yam</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>
+		<!-- 验证码 end -->
+		<action name="userLogin" class="com.zzdc.iotloc.action.UserLoginAction"
+			method="userLogin">
+			<result name="NG">/login-1.jsp</result>
+			<result name="OK">/index.jsp</result>
+			<result name="OK1">/check_login.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+			<result name="input">/login-1.jsp</result>
+			<!-- <result name="reloadURL" type="redirect">${prePage} </result> -->
+		</action>
+
+		<action name="logout" class="com.zzdc.iotloc.action.UserLoginAction"
+			method="loginOut">
+			<result name="OK">/login-1.jsp</result>
+		</action>
+
+		<!-- 用户管理start 从页面跳到后台 auther:guoqiang add date:2015/10/17 -->
+		<action name="usermanage" class="com.zzdc.iotloc.action.AdminManageAction"
+			method="showAdminInfo">
+			<result name="success">/usermanage/usermanage.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+		<!-- 增加用户 从页面跳到后台 auther:guoqiang add date:2015/10/19 -->
+		<action name="addAdmin" class="com.zzdc.iotloc.action.AdminManageAction"
+			method="addAdminInfo">
+			<result type="chain">selUserInfobyid</result>
+			<result name="nosession" type="chain">logout</result>
+			<result name="fail">/executeFail.jsp</result>
+		</action>
+
+		<!-- 用户管理start 从页面跳到后台 -->
+		<action name="selUserInfobyid" class="com.zzdc.iotloc.action.AdminManageAction"
+			method="showAdminInfo">
+			<result name="success">/usermanage/usermanage.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 用户管理end -->
+
+		<!-- 用户管理start 从页面跳到后台 -->
+		<action name="usermanagebyuser" class="com.zzdc.iotloc.action.AdminManageAction"
+			method="showAdminByUser">
+			<result name="success">/usermanage/usermanage.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 用户管理end -->
+
+		<!-- 增加用户 从页面跳到后台 auther:guoqiang add date:2015/10/19 -->
+		<action name="showAddAdminWeb" class="com.zzdc.iotloc.action.AdminManageAction"
+			method="showAddAdminWeb">
+			<result name="success">/usermanage/adduser.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 增加用户end -->
+
+		<!-- 手机状态追踪 start -->
+		<action name="showPhoneStatus"
+                class="com.zzdc.iotloc.action.PhoneStatusManageAction" method="showPhoneStatusAllSN">
+			<result name="success">/phonemanage/phonemanage.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+		<!-- 手机状态追踪 end -->
+
+		<action name="searchPhoneStatusBySN"
+                class="com.zzdc.iotloc.action.PhoneStatusManageAction" method="showPhoneStatusBySN">
+			<result name="success">/phonemanage/phonemanage.jsp</result>
+			<result name="error">/executeFail.jsp</result>
+		</action>
+
+		<action name="showPhoneStatusAllUser"
+                class="com.zzdc.iotloc.action.PhoneStatusManageAction" method="showPhoneStatusAllUserId">
+			<result name="success">/phonemanage/borrowmanage.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+		<action name="searchPhoneStatusByUser"
+                class="com.zzdc.iotloc.action.PhoneStatusManageAction" method="showPhoneStatusByUser">
+			<result name="success">/phonemanage/borrowmanage.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+		<!-- 機櫃管理start 从页面跳到后台 auther:tong add date:2019/1/11 -->
+		<action name="cabinetinfo" class="com.zzdc.iotloc.action.CabinetInfoAction"
+			method="showCabinetInfo">
+			<result name="success">/cabinetmanage/cabinetmanage.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 機櫃信息過濾   auther:tong add date:2019/1/18 -->
+		<action name="checkcabinetid" class="com.zzdc.iotloc.action.CabinetInfoAction"
+			method="checkCabinetIdInfo">
+			<result name="success">/cabinetmanage/searchcabinetbyid.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 機關管理end -->
+
+		<!-- 用户管理end -->
+		<!-- 用户管理start 从页面跳到后台 auther:guoqiang add date:2015/10/17 -->
+		<action name="showAllUser" class="com.zzdc.fileexchange.action.UserManageAction"
+			method="showAllUser">
+			<result name="success">/usermanage/usermanage.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 用户管理end -->
+
+
+		<!-- 删除用户 auther:tong add date:2019/01/21 -->
+		<action name="deleteuser" class="com.zzdc.iotloc.action.AdminManageAction"
+			method="deleteUser">
+			<result type="chain">usermanage</result>
+			<!-- <result name="success">/usermanage/usermanage.jsp</result> -->
+			<result name="nosession" type="chain">logout</result>
+			<!--<result name="success">/usermanage/adduser.jsp</result> -->
+			<result name="fail">/executeFail.jsp</result>
+		</action>
+
+		<!-- 修改已選中用户信息 auther:tong add date:2019/01/22 -->
+		<action name="findSeletedUserInfo" class="com.zzdc.iotloc.action.AdminManageAction"
+			method="findSeletedUserInfo">
+			<result name="success">/usermanage/edituser.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+		<!-- 修改用户 auther:tong add date:2019/01/22 -->
+		<action name="modifyUserInfo" class="com.zzdc.iotloc.action.AdminManageAction"
+			method="modifyUserInfo">
+			<result type="chain">usermanage</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+
+		<!-- 查詢project -->
+		<action name="showAddFile" class="com.zzdc.fileexchange.action.UserManageAction"
+			method="showAddUserWeb">
+			<result name="success">/filemanage/fileUpload.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+		<!-- 删除file -->
+		<action name="delFile" class="com.zzdc.fileexchange.action.SearchFileAction"
+			method="delFile">
+			<result name="success" type="redirectAction">
+				<param name="actionName">searchfile</param>
+				<param name="fileAlldetail.file_id">${newid}</param>
+			</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+		<!-- 修改用户登录密码 auther:tong add date:2019/01/22 -->
+		<action name="showUpdatePassWord" class="com.zzdc.iotloc.action.AdminManageAction"
+			method="showUpdatePassWord">
+			<result name="success">/usermanage/updatepassword.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 修改用户登录密码end -->
+
+		<!-- 修改用户登录密码 auther:tong add date:2019/01/22 -->
+		<action name="updatePassWord" class="com.zzdc.iotloc.action.AdminManageAction"
+			method="updatePasswordForm">
+			<result type="chain">usermanage</result>
+			<!--<result name="success">/usermanage/adduser.jsp</result> -->
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+		<!-- 文件列表start 从页面跳到后台 auther:guoqiang add date:2015/10/20 -->
+		<action name="searchfile" class="com.zzdc.fileexchange.action.SearchFileAction"
+			method="showfiledetail">
+			<result name="success">/filemanage/filedetail1.jsp</result>
+			<result name="input">/filemanage/filedetail1.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 文件列表end -->
+		<!-- 文件列表start 从页面跳到后台 auther:guoqiang add date:2015/10/20 -->
+		<action name="searchfilebyid" class="com.zzdc.fileexchange.action.SearchFileAction"
+			method="showfiledetailbyid">
+			<result name="success">/filemanage/filedetail.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 文件列表end -->
+
+		<!-- 意見反饋start -->
+		<action name="issue" class="com.zzdc.fileexchange.action.UserManageAction"
+			method="saveIssue">
+			<result name="success" type="redirectAction">
+				<param name="actionName">findrecentissue</param>
+				<param name="fr">su</param>
+			</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<action name="findrecentissue" class="com.zzdc.fileexchange.action.UserManageAction"
+			method="findRecentIssue">
+			<result name="success">/contact.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- <action name="updateissue" class="com.zzdc.fileexchange.action.UserManageAction" 
+			method="updateIssue"> <result type="chain">findissue</result> <result name="fail">/executeFail.jsp</result> 
+			</action> -->
+		<action name="findissue" class="com.zzdc.fileexchange.action.UserManageAction"
+			method="findIssue">
+			<result name="success">/issuelist.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 意見反饋end -->
+		<!-- 文件列表start 从页面跳到后台 auther:guoqiang add date:2015/11/3 -->
+		<action name="findfileid" class="com.zzdc.fileexchange.action.SearchFileAction"
+			method="findfile">
+			<result name="success">/filemanage/findfile.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 文件列表end -->
+
+
+		<!-- 刪除start -->
+		<action name="delfile_info" class="com.zzdc.fileexchange.action.SearchFileAction"
+			method="delfile_info">
+			<result name="success" type="redirectAction">
+				<param name="actionName">findfileid</param>
+				<param name="upl">my</param>
+			</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 刪除end -->
+
+		<!-- 项目管理start 从页面跳到后台 auther:guoqiang add date:2015/10/20 -->
+		<action name="projectmanage" class="com.zzdc.fileexchange.action.ProjectManageAction"
+			method="showProjectInfo">
+			<result name="success">/projectmanage/projectmanage.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 項目管理end -->
+
+		<!-- 增加項目 从页面跳到后台 auther:guoqiang add date:2015/10/21 -->
+		<action name="addproject" class="com.zzdc.fileexchange.action.ProjectManageAction"
+			method="addProject">
+			<result type="chain">projectmanage</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+		<!-- 增加项目 从页面跳到后台 auther:guoqiang add date:2015/10/19 -->
+		<action name="showAddProjectWeb" class="com.zzdc.fileexchange.action.ProjectManageAction"
+			method="showAddProjectWeb">
+			<result name="success">/projectmanage/addproject.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+		<!-- 增加项目end -->
+
+		<!-- 删除项目即将项目表的状态信息改为不可用即可 从页面跳到后台 auther:guoqiang add date:2015/10/21 -->
+		<action name="updateproject" class="com.zzdc.fileexchange.action.ProjectManageAction"
+			method="updateProject">
+			<result type="chain">projectmanage</result>
+			<!--<result name="success">/usermanage/adduser.jsp</result> -->
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+		<!-- 根据项目ID查询项目信息 从页面跳到后台 auther:guoqiang add date:2015/10/21 -->
+		<action name="findProject" class="com.zzdc.fileexchange.action.ProjectManageAction"
+			method="findProject">
+			<result name="success">/projectmanage/editproject.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+		</action>
+
+		<!-- 修改项目 从页面跳到后台 auther:guoqiang add date:2015/10/21 -->
+		<action name="modityProject" class="com.zzdc.fileexchange.action.ProjectManageAction"
+			method="modityProject">
+			<result type="chain">projectmanage</result>
+			<result name="nosession" type="chain">logout</result>
+			<result name="fail">/executeFail.jsp</result>
+		</action>
+
+
+
+
+
+	</package>
+
+
+	<package name="PaginationTest" extends="struts-default">
+		<action name="pagination"
+			class="com.zzdc.fileexchange.action.PaginationTestAction" method="test">
+			<result name="OK">/fileDetailTest.jsp</result>
+		</action>
+
+		<!-- Added by quanzhuo -->
+		<action name="downloadhistorysearch"
+			class="com.zzdc.fileexchange.action.DownloadHistorySearchAction"
+			method="searchDownLoadFileHistory">
+			<result name="success">/history/DownloadHistory.jsp</result>
+
+			<result name="error">/executeFail.jsp</result>
+		</action>
+
+
+		<!-- Added by Quan Zhuo -->
+		<action name="uploadhistorysearch"
+			class="com.zzdc.fileexchange.action.UploadHistorySearchAction"
+			method="searchUploadFileHistory">
+			<result name="success">/history/UploadHistory.jsp</result>
+			<result name="nosession" type="chain">logout</result>
+			<result name="error">/executeFail.jsp</result>
+		</action>
+
+	</package>
+
+	<package name="sharefile" extends="struts-default">
+		<interceptors>
+			<!-- 定义权限控制拦截器 -->
+			<interceptor name="authority"
+				class="com.zzdc.iotloc.util.UserLoginInterceptor" />
+		</interceptors>
+		<action name="person"
+			class="com.zzdc.fileexchange.action.FileShareExecuteAction" method="exePersonShare">
+			<result name="success">/filemanage/filedetailurl.jsp</result>
+			<result name="input">/filemanage/fileDownload.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+		</action>
+		<action name="group"
+			class="com.zzdc.fileexchange.action.FileShareExecuteAction" method="exeGroupShare">
+			<result name="success">/filemanage/filedetailurl.jsp</result>
+			<result name="input">/filemanage/fileDownload.jsp</result>
+			<result name="fail">/executeFail.jsp</result>
+			<result name="loginAuth" type="chain">logout</result>
+			<interceptor-ref name="authority" />
+		</action>
+
+	</package>
+
+	<package name="jQueryAjax" extends="json-default">
+		<action name="randomCheck" class="com.zzdc.fileexchange.action.UserLoginAction">
+			<!-- 返回类型为json 在sjon-default中定义 -->
+			<result type="json">
+				<!-- root的值对应要返回的值的属性 -->
+				<!-- 这里的result值即是 对应action中的 result -->
+				<param name="root">randomResult</param>
+			</result>
+		</action>
+
+		<action name="checkLogin" class="com.zzdc.fileexchange.action.UserLoginAction"
+			method="checkLogin">
+			<result type="json">
+				<!-- root的值对应要返回的值的属性 -->
+				<!-- 这里的result值即是 对应action中的 result -->
+				<param name="root">randomResult</param>
+			</result>
+		</action>
+		<!-- add by paul 2015-12-17 for 生成文件短连接 -->
+		<action name="exeShortURL"
+			class="com.zzdc.fileexchange.action.FileShareExecuteAction" method="executeShortURL">
+			<result type="json">
+				<param name="root">shortURLJSON</param>
+			</result>
+		</action>
+		<action name="updateissue" class="com.zzdc.fileexchange.action.UserManageAction"
+			method="updateIssue">
+			<result type="json">
+				<param name="root">executeCode</param>
+			</result>
+		</action>
+
+	</package>
+</struts>

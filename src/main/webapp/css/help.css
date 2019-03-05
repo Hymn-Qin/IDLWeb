@@ -1,0 +1,7 @@
+@CHARSET "BIG5";
+.q_a ul li h3{background:url(../img/qaicon.png) no-repeat left center}
+.q_a ul li{list-style-type:none;}
+    .q_a ul li p{padding-left:40px;margin-bottom:30px;line-height:30px}
+    .q_a h1{text-align:center;color:#5db2ca;font-size:24px;line-height:50px;background-color:#e3f4f9;padding:50px 50px}
+    .po div ul li h3{padding-left:40px;font-size:24px;line-height:32px;color:#5db2ca;margin:15px 0}
+    body.qa{margin-left:10%;margin-right:10%;}

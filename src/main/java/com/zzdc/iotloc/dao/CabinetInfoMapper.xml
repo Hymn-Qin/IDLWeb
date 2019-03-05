@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.zzdc.iotloc.dao.CabinetInfoMapper">
+<!-- mybatis cache change to ehcache  对于某一条不想被cache的sql需要把useCache="false" -->
+<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+<resultMap type="CabinetInfo" id="cabinetList">
+		<id column="cabinet_id" property="cabinet_id"/>
+		<result column="box_id" property="box_id"/>
+		<result column="SN" property="sn"/>
+		<result column="fault_type" property="fault_type"/>
+	</resultMap>
+
+<select id="showCabinetInfo" parameterType="CabinetInfo" resultMap="cabinetList">
+select cabinet_id,box_id,SN,fault_type from cabinet 
+
+</select>
+<select id="findCabinetExists" resultMap="cabinetList" parameterType="CabinetInfo" useCache="false">
+select * from cabinet where cabinet.cabinet_id=#{cabinet_id}
+<!-- <if test="user_password!=null">
+AND one.user_password=#{user_password}
+</if> -->
+</select>
+<select id="findCabinetBoxExists" resultMap="cabinetList" parameterType="CabinetInfo" useCache="false">
+select * from cabinet where cabinet.cabinet_id=#{cabinet_id}
+ and cabinet.box_id=#{box_id}
+<!-- <if test="user_password!=null">
+AND one.user_password=#{user_password}
+</if> -->
+</select>
+
+   <!-- <resultMap type="FileUploadInfo" id="FileList">
+		<id column="file_id" property="file_id"/>
+		<result column="file_to" property="file_to"/>
+		<result column="file_cc" property="file_cc"/>
+		<result column="file_bcc" property="file_bcc"/>
+		<result column="file_subject" property="file_subject"/>
+		<result column="file_body" property="file_body"/>
+		<result column="file_user" property="file_user"/>
+		<result column="file_notify" property="file_notify"/>
+		<result column="file_note" property="file_note"/>
+		<result column="file_infocol" property="file_infocol"/>
+		<result column="file_create_time" property="file_create_time"/>
+		<result column="file_update_time" property="file_update_time"/>
+		<result column="file_status" property="file_status"/>
+		<result column="file_project" property="file_project"/>
+		<collection property="projectList" ofType="UserProject">
+		    <id column="id" property="id"/>
+			<result column="user_id" property="user_id"/>
+			<result column="project_id" property="project_id"/>
+			<result column="flag" property="flag"/>
+			<result column="create_date" property="create_date"/>
+		</collection>
+	</resultMap>-->
+	<!-- 		<collection property="faultinfo" ofType="faultlist">
+		    <id column="id" property="id"/>
+			<result column="fault_type" property="fault_type"/>
+			<result column="fault_detail" property="fault_detail"/>
+			<result column="valid_flag" property="valid_flag"/>
+		</collection> 
+		<collection property="sninfo" ofType="Sn">
+		    <result column="sn" property="sn"/>
+			<result column="is_alive" property="is_alive"/>
+			<result column="create_time" property="create_time"/>
+			<result column="update_time" property="update_time"/>
+		</collection>-->
+</mapper>

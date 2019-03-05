@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzdc.iotloc.dao.PhoneStatusManageMapper">
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+
+	<resultMap type="PhoneStatusInfo" id="findPhoneStatusInfo">
+		<result column="SN" property="sn" />
+		<collection property="borrowInfo" ofType="BorrowInfo">
+			<result column="borrow_time" property="borrow_time" />
+			<result column="sn" property="sn" />
+			<result column="return_time" property="return_time" />
+			<result column="user_id" property="user_id" />
+			<association property="user" javaType="UserInfo">
+				<id column="foxconn_id" property="usernum" />
+				<result column="cardid" property="cardid" />
+				<result column="user_name" property="name" />
+				<result column="depart" property="department" />
+				<result column="mobile" property="mobile" />
+				<result column="sex" property="sex" />
+				<result column="age" property="age"/>
+				<result column="image_base64" property="image_url" />
+				
+				<result column="age" property="age" />
+			</association>
+		</collection>
+		<collection property="cabinet" ofType="CabinetInfo">
+			<result column="cabinet_id" property="cabinet_id" />
+			<result column="box_id" property="box_id" />
+			<result column="SN" property="sn" />
+			<result column="fault_type" property="fault_type" />
+		</collection>
+
+	</resultMap>
+
+
+	<select id="showPhoneStatusAllSN" resultMap="findPhoneStatusInfo"
+		parameterType="PhoneStatusInfo" useCache="false">
+		select * from sn one left
+		join borrow two on one.sn=two.sn LEFT OUTER JOIN user_emp four ON
+		two.user_id=four.foxconn_id
+		left outer join cabinet cabinet on
+		one.SN=cabinet.SN 
+		
+	</select>
+
+	<select id="showPhoneStatusBySN" resultMap="findPhoneStatusInfo"
+		parameterType="PhoneStatusInfo" useCache="false">
+		select * from sn one left
+		join borrow two on one.sn=two.sn LEFT OUTER JOIN user_emp four ON
+		two.user_id=four.foxconn_id
+		left outer join cabinet cabinet on
+		one.SN=cabinet.SN where one.sn=#{sn}
+	</select>
+
+	<select id="showPhoneStatusAllUserId" resultMap="findPhoneStatusInfo"
+		parameterType="PhoneStatusInfo" useCache="false">
+		select * from borrow  one left join user_emp two on one.user_id=two.foxconn_id
+
+	</select>
+	
+	<select id="showPhoneStatusByUser" resultMap="findPhoneStatusInfo" 
+		parameterType="UserInfo" useCache="false">
+		select * from borrow  one left join user_emp two on one.user_id=two.foxconn_id 
+		where one.user_id=#{usernum}
+
+	</select>
+	
+
+</mapper>

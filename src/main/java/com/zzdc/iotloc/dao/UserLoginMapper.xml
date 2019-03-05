@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzdc.iotloc.dao.UserLoginMapper">
+<!-- mybatis cache change to ehcache  对于某一条不想被cache的sql需要把useCache="false" -->
+<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+
+   <resultMap type="AdminInfo" id="findAdminList">
+		<id column="user_id" property="user_id"/>
+		<result column="user_foxconn_id" property="user_foxconn_id"/>
+		<result column="user_password" property="user_password"/>
+		<result column="user_name" property="user_name"/>
+		<result column="user_mail" property="user_mail"/>
+		<result column="user_role" property="user_role"/>
+		<result column="create_date" property="create_date"/>
+	</resultMap>
+	
+<select id="findUserIsExists" resultMap="findAdminList" parameterType="AdminInfo" useCache="false">
+select * from admininfo one where 1=1
+<if test="user_foxconn_id!=null">
+and one.user_foxconn_id=#{user_foxconn_id}
+</if>
+<if test="user_password!=null">
+AND one.user_password=#{user_password}
+</if>
+</select>
+
+</mapper>
